@@ -1,0 +1,34 @@
+{
+  "files": [
+    {
+      "path": "index.html",
+      "content": "<!doctype html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <link rel=\"stylesheet\" href=\"styles.css\">\n    <title>Snake and Ladder Game</title>\n</head>\n<body>\n    <h1>Snake and Ladder Game</h1>\n    <div id=\"player-input\">\n        <label for=\"player1\">Player 1 Name:</label>\n        <input type=\"text\" id=\"player1\" required>\n        <label for=\"player2\">Player 2 Name:</label>\n        <input type=\"text\" id=\"player2\" required>\n        <button id=\"start-game\">Start Game</button>\n    </div>\n    <div id=\"game-board\" style=\"display:none;\">\n        <div id=\"scoreboard\"></div>\n        <div id=\"board\">\n            <!-- Game board will be generated here -->\n        </div>\n        <button id=\"roll-dice\">Roll Dice</button>\n        <div id=\"dice-result\"></div>\n    </div>\n    <script src=\"script.js\"></script>\n</body>\n</html>",
+      "encoding": "utf-8"
+    },
+    {
+      "path": "styles.css",
+      "content": "body { font-family: Arial, sans-serif; }\n#board { display: grid; grid-template-columns: repeat(10, 50px); grid-template-rows: repeat(10, 50px); }\n#board div { border: 1px solid #000; display: flex; align-items: center; justify-content: center; }\n.token { width: 40px; height: 40px; background-color: red; border-radius: 50%; position: relative; transition: transform 0.5s ease; }\n#scoreboard { margin-bottom: 20px; }\n",
+      "encoding": "utf-8"
+    },
+    {
+      "path": "script.js",
+      "content": "let player1, player2;\nlet currentPlayer;\nlet playerWins = { player1: 0, player2: 0 };\nlet playerPositions = { player1: 0, player2: 0 };\n\ndocument.getElementById('start-game').addEventListener('click', function() {\n    player1 = document.getElementById('player1').value || 'Player 1';\n    player2 = document.getElementById('player2').value || 'Player 2';\n    currentPlayer = 'player1';\n    document.getElementById('player-input').style.display = 'none';\n    document.getElementById('game-board').style.display = 'block';\n    updateScoreboard();\n    generateBoard();\n});\n\nfunction generateBoard() {\n    const board = document.getElementById('board');\n    for (let i = 100; i >= 1; i--) {\n        const cell = document.createElement('div');\n        cell.innerText = i;\n        board.appendChild(cell);\n    }\n}\n\ndocument.getElementById('roll-dice').addEventListener('click', function() {\n    const diceRoll = Math.floor(Math.random() * 6) + 1;\n    document.getElementById('dice-result').innerText = 'You rolled a ' + diceRoll;\n    moveToken(diceRoll);\n});\n\nfunction moveToken(steps) {\n    const currentPosition = playerPositions[currentPlayer];\n    const newPosition = currentPosition + steps;\n    if (newPosition <= 100) {\n        playerPositions[currentPlayer] = newPosition;\n        animateToken(currentPlayer, currentPosition, newPosition);\n        checkWin();\n    }\n}\n\nfunction animateToken(player, from, to) {\n    const token = document.createElement('div');\n    token.classList.add('token');\n    document.getElementById('board').children[100 - from].appendChild(token);\n    setTimeout(() => {\n        token.style.transform = 'translateY(-' + (to - from) * 50 + 'px)';\n    }, 100);\n}\n\nfunction checkWin() {\n    if (playerPositions[currentPlayer] === 100) {\n        alert(currentPlayer === 'player1' ? player1 + ' wins!' : player2 + ' wins!');\n        playerWins[currentPlayer]++;\n        updateScoreboard();\n        resetGame();\n    } else {\n        currentPlayer = currentPlayer === 'player1' ? 'player2' : 'player1';\n    }\n}\n\nfunction updateScoreboard() {\n    document.getElementById('scoreboard').innerText = `${player1}: ${playerWins.player1} wins, ${player2}: ${playerWins.player2} wins`;\n}\n\nfunction resetGame() {\n    playerPositions = { player1: 0, player2: 0 };\n    document.getElementById('dice-result').innerText = '';\n    const tokens = document.querySelectorAll('.token');\n    tokens.forEach(token => token.remove());\n}",
+      "encoding": "utf-8"
+    },
+    {
+      "path": "README.md",
+      "content": "# Snake and Ladder Game\n\n## Overview\nThis is a simple Snake and Ladder game that allows two players to compete against each other. Players can input their names before starting the game, and the game keeps track of total wins for each player.\n\n## Features\n- Player name input before starting the game.\n- Scoreboard that tracks total wins for each player.\n- Animated token movement when players advance on the board.\n\n## Setup Instructions\n1. Clone the repository.\n2. Open `index.html` in a web browser to play the game.\n\n## How to Play\n- Enter names for Player 1 and Player 2.\n- Click 'Start Game' to begin.\n- Roll the dice to move your token.\n- The first player to reach 100 wins the game.\n\n## License\nThis project is licensed under the MIT License.",
+      "encoding": "utf-8"
+    },
+    {
+      "path": "LICENSE",
+      "content": "MIT License\n\nCopyright (c) 2023\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\n...",
+      "encoding": "utf-8"
+    },
+    {
+      "path": ".github/workflows/pages.yml",
+      "content": "name: Deploy to GitHub Pages\n\non:\n  push:\n    branches:\n      - main\n\njobs:\n  deploy:\n    runs-on: ubuntu-latest\n    steps:\n      - name: Checkout code\n        uses: actions/checkout@v2\n      - name: Deploy to GitHub Pages\n        uses: peaceiris/actions-gh-pages@v3\n        with:\n          github_token: ${{ secrets.GITHUB_TOKEN }}\n          publish_dir: ./\n",
+      "encoding": "utf-8"
+    }
+  ]
+}
