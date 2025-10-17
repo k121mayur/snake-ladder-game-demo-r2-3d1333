@@ -1,0 +1,5 @@
+body { font-family: Arial, sans-serif; }
+#board { display: grid; grid-template-columns: repeat(10, 50px); grid-template-rows: repeat(10, 50px); }
+#board div { border: 1px solid #000; display: flex; align-items: center; justify-content: center; }
+.token { width: 40px; height: 40px; background-color: red; border-radius: 50%; position: relative; transition: transform 0.5s ease; }
+#scoreboard { margin-bottom: 20px; }
